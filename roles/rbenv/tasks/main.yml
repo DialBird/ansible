@@ -1,0 +1,12 @@
+---
+- name: install rbenv
+  git: >
+    repo=https://github.com/rbenv/rbenv.git
+    dest=/home/keisuke/.rbenv
+  notify:
+    - "create rbenv path"
+
+- name: install ruby-build
+  git: >
+    repo=https://github.com/rbenv/ruby-build.git
+    dest=/home/keisuke/.rbenv/plugins/ruby-build

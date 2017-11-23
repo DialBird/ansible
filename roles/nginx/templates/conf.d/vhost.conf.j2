@@ -1,0 +1,25 @@
+upstream app {
+    server unix:/data/myapp/shared/tmp/sockets/puma.sock fail_timeout=0;
+}
+
+server {
+    listen       80;
+    server_name  lala.work;
+
+    root /data/myapp/current/public;
+
+    access_log /var/log/nginx/myapp.access.log;
+    error_log /var/log/nginx/myapp.error.log;
+
+    location @app {
+        include /etc/nginx/proxy.conf;
+        if ($http_x_forwarded_proto != 'https') {
+            rewrite ^ https://$host$request_uri;
+        }
+        proxy_pass http://app;
+    }
+
+    location / {
+        try_files $uri/index.html $uri @app;
+    }
+}

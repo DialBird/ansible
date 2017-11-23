@@ -1,0 +1,17 @@
+---
+- name: yum update
+  yum: name=* state=latest
+
+- name: basic yum install
+  yum: name={{ item }} state=installed
+  with_items:
+    - vim
+    - git
+    - gcc
+    - openssl-devel
+    - readline-devel
+    - sqlite-devel
+    - gcc-c++
+    - libffi-devel
+    - postgresql95
+    - postgresql95-devel

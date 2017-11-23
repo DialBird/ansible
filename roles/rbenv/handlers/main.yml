@@ -1,0 +1,16 @@
+---
+- name: set rbenv path
+  listen: "create rbenv path"
+  shell: echo 'export PATH=$PATH:$HOME/.rbenv/bin' >> /home/keisuke/.bash_profile
+
+- name: set rbenv init
+  listen: "create rbenv path"
+  shell: echo 'eval "$(rbenv init -)"' >> /home/keisuke/.bash_profile
+
+- name: set rbenv owner
+  listen: "create rbenv path"
+  file: path=/home/keisuke/.rbenv owner=keisuke group=keisuke recurse=yes
+
+- name: restart shell
+  listen: "create rbenv path"
+  shell: exec $SHELL -l

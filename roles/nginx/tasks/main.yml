@@ -1,0 +1,12 @@
+---
+- name: install nginx
+  yum: name=nginx state=installed
+
+- name: put nginx config for webserver
+  template: src={{ item }}.j2 dest=/etc/nginx/{{ item }} backup=yes
+  with_items:
+    - .htpasswd
+    - proxy.conf
+    - conf.d/vhost.conf
+  notify:
+    - reload nginx

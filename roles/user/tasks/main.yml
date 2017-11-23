@@ -1,0 +1,31 @@
+---
+- name: create user
+  user: name=keisuke password=W7LukatJ/ZQvk
+
+- name: add users to sudoers
+  shell: echo "{{ item.user }} {{ item.role }}" > /tmp/keisuke \
+         && chmod 440 /tmp/keisuke \
+         && chown root:root /tmp/keisuke \
+         && visudo -q -c -f /tmp/keisuke \
+         && mv /tmp/keisuke /etc/sudoers.d/keisuke
+  with_items:
+    - { user: "keisuke", role: "ALL=(ALL) NOPASSWD: ALL" }
+
+- name: craete .ssh directory
+  file:
+    path: /home/keisuke/.ssh
+    state: directory
+    mode: 0700
+    owner: keisuke
+    group: keisuke
+
+- name: copy pubkey
+  template:
+    src: '{{ item }}.j2'
+    dest: '/home/keisuke/.ssh/{{ item }}'
+    backup: yes
+    mode: 0600
+    owner: keisuke
+    group: keisuke
+  with_items:
+    - authorized_keys
